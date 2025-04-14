@@ -42,7 +42,7 @@ variable "instance_tenancy" {
 variable "project_name" {
   description = "Project name identifier"
   type        = string
-  default     = "otms"
+  default     = "buildpiper"
 }
 
 
