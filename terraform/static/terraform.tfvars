@@ -79,13 +79,6 @@ security_groups_rule = {
 eks_cluster_version   = "1.32"
 eks_cluster_role_name = "eks-cluster-roles"
 
-eks_addons = [
-  "vpc-cni",
-  "coredns",
-  "kube-proxy",
-  "aws-ebs-csi-driver",
-  "aws-efs-csi-driver"
-]
 
 launch_template_name_prefix = "eks-node-launch-template"
 instance_type               = "t3.medium"
