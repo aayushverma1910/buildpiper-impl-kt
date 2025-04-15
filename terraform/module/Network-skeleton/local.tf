@@ -9,7 +9,7 @@ locals {
 locals {
   subnets = [
     for i in range(length(var.subnet_names)) : {
-      name       = "${var.env}-${var.project_name}-${var.subnet_names[i]}-subnet"
+      name       = "${var.env}-${var.project_name}-${var.subnet_names[i]}"
       cidr       = var.subnet_cidrs[i]
       avail_zone = var.subnet_azs[i]
     }
@@ -34,6 +34,18 @@ locals {
     aws_subnet.subnets[i].id
   ]
 
+}
+
+locals {
+  application_subnet_ids = [
+    for i, subnet in aws_subnet.subnets :
+    subnet.id if can(regex("application", var.subnet_names[i]))
+  ]
+
+  database_subnet_ids = [
+    for i, subnet in aws_subnet.subnets :
+    subnet.id if can(regex("database", var.subnet_names[i]))
+  ]
 }
 
 #################### IGW ########################
@@ -73,7 +85,7 @@ locals {
   security_group_config = {
     for sg_key, sg_value in var.security_groups_rule :
     sg_key => {
-      name    = local.security_groups[sg_key]
+      name    = try(local.security_groups[sg_key], null)
       ingress = sg_value.ingress_rules
       egress  = sg_value.egress_rules
     }
