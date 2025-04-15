@@ -154,17 +154,15 @@ resource "aws_security_group_rule" "egress" {
   source_security_group_id = each.value.rule_type == "sg" ? aws_security_group.sg[each.value.rule.source_sg_names[0]].id : null
 }
 
-
-
 ###################### EKS Cluster  ####################
 
 resource "aws_eks_cluster" "eks" {
   name     = local.eks_name
   role_arn = aws_iam_role.eks_cluster_role.arn
-  version  = "1.32"
+  version  = var.eks_cluster_version
 
   vpc_config {
-    subnet_ids = local.private_subnet_ids #### subnet id
+    subnet_ids = local.private_subnet_ids #### subnet id module 
     security_group_ids = [
       for sg_key, sg in aws_security_group.sg : sg.id
       if sg_key != "public"
@@ -183,7 +181,7 @@ resource "aws_eks_cluster" "eks" {
 }
 
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "eks-cluster-roles"
+  name = var.eks_cluster_role_name
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -205,12 +203,11 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
   role       = aws_iam_role.eks_cluster_role.name
 }
 
-
 ###################### Node Group  ####################
 
 resource "aws_launch_template" "eks_launch_template" {
-  name_prefix   = "eks-node-launch-template"
-  instance_type = "t3.medium"
+  name_prefix   = var.launch_template_name_prefix
+  instance_type = var.instance_type
 
   network_interfaces {
     associate_public_ip_address = false
@@ -238,9 +235,9 @@ resource "aws_eks_node_group" "eks_node_group" {
   }
 
   scaling_config {
-    desired_size = 2
-    max_size     = 3
-    min_size     = 1
+    desired_size = var.node_group_desired_size
+    max_size     = var.node_group_max_size
+    min_size     = var.node_group_min_size
   }
 
   tags = {
