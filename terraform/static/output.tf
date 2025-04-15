@@ -1,5 +1,5 @@
 output "vpc_id" {
-  value       = aws_vpc.otms_vpc.id
+  value       = aws_vpc.buildpiper_vpc.id
   description = "id of the otms vpc "
 }
 
@@ -46,9 +46,14 @@ output "eks_cluster_endpoint" {
 
 ###################### Outputs for Node Group ####################
 
-output "eks_node_group_name" {
+output "eks_node_group_app" {
   description = "The name of the EKS node group"
-  value       = aws_eks_node_group.eks_node_group.node_group_name
+  value       = aws_eks_node_group.app_node_group.node_group_name
+}
+
+output "eks_node_group_db" {
+  description = "The name of the EKS node group"
+  value       = aws_eks_node_group.db_node_group.node_group_name
 }
 
 output "eks_node_group_role_arn" {
