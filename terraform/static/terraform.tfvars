@@ -59,7 +59,7 @@ security_groups_rule = {
     ]
   }
 
-  ######### database Security Groups ##########
+  ######### databse Security Groups ##########
   database = {
     name = "database"
     ingress_rules = [
@@ -75,13 +75,14 @@ security_groups_rule = {
   }
 }
 
+################## EKS Cluster ##############################
+eks_cluster_version = "1.32"  
 
-eks_cluster_version   = "1.32"
-eks_cluster_role_name = "eks-cluster-roles"
+eks_cluster_role_name = "eks-cluster-roles"  
 
+launch_template_name_prefix = "eks-node-launch-template"  
 
-launch_template_name_prefix = "eks-node-launch-template"
-instance_type               = "t3.medium"
+instance_type = "t3.medium"
 
 eks_node_role_policy_arns = {
   eks_worker_node = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
@@ -89,6 +90,7 @@ eks_node_role_policy_arns = {
   ec2_readonly    = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-node_group_desired_size = 2
-node_group_max_size     = 3
-node_group_min_size     = 1
+node_group_desired_size = 2  
+node_group_max_size     = 3 
+node_group_min_size     = 1  
+
