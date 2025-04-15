@@ -76,8 +76,8 @@ security_groups_rule = {
 }
 
 
-eks_cluster_version     = "1.32"
-eks_cluster_role_name   = "eks-cluster-roles"
+eks_cluster_version   = "1.32"
+eks_cluster_role_name = "eks-cluster-roles"
 
 eks_addons = [
   "vpc-cni",
