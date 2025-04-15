@@ -42,7 +42,7 @@ variable "instance_tenancy" {
 variable "project_name" {
   description = "Project name identifier"
   type        = string
-  default     = "otms"
+  default     = ""
 }
 
 
@@ -52,19 +52,19 @@ variable "project_name" {
 variable "subnet_names" {
   description = "List of subnet names"
   type        = list(string)
-  default     = ["public", "frontend", "application", "database", "public-2"]
+  default     = ["public-sub1", "application-sub1", "application-sub2", "database-sub1", "database-sub1", "public-sub2"]
 }
 
 variable "subnet_cidrs" {
   description = "List of CIDR blocks for subnets"
   type        = list(string)
-  default     = ["192.168.0.0/28", "192.168.0.16/28", "192.168.0.64/27", "192.168.0.48/28", "192.168.0.32/28"]
+  default     = ["192.168.0.0/28", "192.168.0.16/28", "192.168.0.64/27", "192.168.0.48/28", "192.168.0.96/28", "192.168.0.32/28"]
 }
 
 variable "subnet_azs" {
   description = "List of availability zones for subnets"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1a", "us-east-1a", "us-east-1a", "us-east-1b"]
+  default     = ["us-east-1a", "us-east-1a", "us-east-1b", "us-east-1a", "us-east-1b", "us-east-1b"]
 }
 
 #################### NAT ########################
