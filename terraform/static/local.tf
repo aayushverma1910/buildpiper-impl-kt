@@ -131,3 +131,14 @@ locals {
   node_group_name = "${var.env}-${var.project_name}-eks-node-group"
 }
 
+locals {
+  application_subnet_ids = [
+    for i, subnet in aws_subnet.subnets :
+    subnet.id if can(regex("application", var.subnet_names[i]))
+  ]
+
+  database_subnet_ids = [
+    for i, subnet in aws_subnet.subnets :
+    subnet.id if can(regex("database", var.subnet_names[i]))
+  ]
+}
