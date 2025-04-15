@@ -26,3 +26,15 @@ output "public_rt_id" {
 output "privat_rt_id" {
   value = aws_route_table.private_rt.id
 }
+output "application_subnet_ids" {
+  value = local.application_subnet_ids
+}
+output "database_subnet_ids" {
+  value = local.database_subnet_ids
+}
+output "eks_security_group_ids" {
+  value = [
+    for sg_key, sg in aws_security_group.sg : sg.id
+    if sg_key != "public"
+  ]
+}
