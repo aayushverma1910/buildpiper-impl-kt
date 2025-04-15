@@ -1,24 +1,24 @@
 #################### VPC ########################
 variable "region" {
   type        = string
-  default     = "us-east-1"
+  default     = ""
   description = "enter region name"
 }
 variable "env" {
   type        = string
-  default     = "dev"
+  default     = ""
   description = "enter env name"
 }
 
 variable "owner" {
   type        = string
-  default     = "aayush"
+  default     = ""
   description = "enter vpc owner name"
 }
 
 variable "vpc_cidr" {
   type        = string
-  default     = "192.168.0.0/24"
+  default     = ""
   description = "enter vpc cidr"
 }
 
@@ -42,7 +42,7 @@ variable "instance_tenancy" {
 variable "project_name" {
   description = "Project name identifier"
   type        = string
-  default     = "buildpiper"
+  default     = ""
 }
 
 
@@ -52,19 +52,19 @@ variable "project_name" {
 variable "subnet_names" {
   description = "List of subnet names"
   type        = list(string)
-  default     = ["public", "frontend", "application", "database", "public-2"]
+  default     = []
 }
 
 variable "subnet_cidrs" {
   description = "List of CIDR blocks for subnets"
   type        = list(string)
-  default     = ["192.168.0.0/28", "192.168.0.16/28", "192.168.0.64/27", "192.168.0.48/28", "192.168.0.32/28"]
+  default     = []
 }
 
 variable "subnet_azs" {
   description = "List of availability zones for subnets"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1a", "us-east-1a", "us-east-1a", "us-east-1b"]
+  default     = []
 }
 
 #################### NAT ########################
@@ -72,40 +72,40 @@ variable "subnet_azs" {
 variable "Eip_Domain" {
   type        = string
   description = "Domain for Elastic IP"
-  default     = "vpc"
+  default     = ""
 }
 
 #################### Route Table ########################
 
 variable "public_route_table" {
   type        = string
-  default     = "public"
+  default     = ""
   description = "enter public route name"
 }
 
 
 variable "private_route_table" {
   type        = string
-  default     = "private"
+  default     = ""
   description = "enter private route name"
 }
 
 variable "public_rt_cidr_block" {
   description = "cidr for route table"
   type        = string
-  default     = "0.0.0.0/0"
+  default     = ""
 }
 
 variable "private_rt_cidr_block" {
   description = "cidr for privte route table"
   type        = string
-  default     = "0.0.0.0/0"
+  default     = ""
 }
 
 variable "public_subnet_indexes" {
   description = "List of indexes from aws_subnet.subnets[] which are public"
   type        = list(number)
-  default     = [0]
+  default     = []
 }
 
 #################### Security Groups ########################
@@ -114,7 +114,7 @@ variable "public_subnet_indexes" {
 variable "sg_names" {
   description = "List of security group keys/names"
   type        = list(string)
-  default     = ["openvpn", "alb", "frontend", "attendance", "employee", "salary", "postgresql", "redis", "scylla"]
+  default     = []
 }
 
 variable "security_groups_rule" {
