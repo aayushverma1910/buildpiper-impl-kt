@@ -74,3 +74,28 @@ security_groups_rule = {
     ]
   }
 }
+
+
+eks_cluster_version     = "1.32"
+eks_cluster_role_name   = "eks-cluster-roles"
+
+eks_addons = [
+  "vpc-cni",
+  "coredns",
+  "kube-proxy",
+  "aws-ebs-csi-driver",
+  "aws-efs-csi-driver"
+]
+
+launch_template_name_prefix = "eks-node-launch-template"
+instance_type               = "t3.medium"
+
+eks_node_role_policy_arns = {
+  eks_worker_node = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  eks_cni         = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  ec2_readonly    = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+node_group_desired_size = 2
+node_group_max_size     = 3
+node_group_min_size     = 1
