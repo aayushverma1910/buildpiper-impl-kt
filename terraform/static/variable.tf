@@ -170,14 +170,6 @@ variable "eks_cluster_role_name" {
   default     = "eks-cluster-roles"
 }
 
-
-variable "eks_addons" {
-  description = "List of EKS Add-ons"
-  type        = list(string)
-  default     = ["vpc-cni", "coredns", "kube-proxy", "aws-ebs-csi-driver", "aws-efs-csi-driver"]
-}
-
-
 variable "launch_template_name_prefix" {
   type        = string
   description = "Prefix for launch template"
