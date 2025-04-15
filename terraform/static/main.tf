@@ -1,6 +1,6 @@
 #################### VPC ########################
 
-resource "aws_vpc" "otms_vpc" {
+resource "aws_vpc" "buildpiper_vpc" {
   cidr_block           = var.vpc_cidr
   instance_tenancy     = var.instance_tenancy
   enable_dns_support   = var.enable_dns_support
@@ -18,11 +18,9 @@ resource "aws_vpc" "otms_vpc" {
 resource "aws_subnet" "subnets" {
   count = length(local.subnets)
 
-  vpc_id                  = aws_vpc.otms_vpc.id
+  vpc_id                  = aws_vpc.buildpiper_vpc.id
   cidr_block              = local.subnets[count.index].cidr
   availability_zone       = local.subnets[count.index].avail_zone
-  #map_public_ip_on_launch = contains(var.public_subnet_indexes, count.index)
-
 
   tags = {
     Name        = local.subnets[count.index].name
@@ -33,7 +31,7 @@ resource "aws_subnet" "subnets" {
 #################### IGW ########################
 
 resource "aws_internet_gateway" "IGW" {
-  vpc_id = aws_vpc.otms_vpc.id
+  vpc_id = aws_vpc.buildpiper_vpc.id
 
   tags = {
     Name  = local.InternetGateway
@@ -62,7 +60,7 @@ resource "aws_nat_gateway" "NAT_GW" {
 #################### Route Table ########################
 
 resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.otms_vpc.id
+  vpc_id = aws_vpc.buildpiper_vpc.id
   route {
     cidr_block = var.public_rt_cidr_block
     gateway_id = aws_internet_gateway.IGW.id
@@ -74,7 +72,7 @@ resource "aws_route_table" "public_rt" {
   }
 }
 resource "aws_route_table" "private_rt" {
-  vpc_id = aws_vpc.otms_vpc.id
+  vpc_id = aws_vpc.buildpiper_vpc.id
   route {
     cidr_block     = var.private_rt_cidr_block
     nat_gateway_id = aws_nat_gateway.NAT_GW.id
@@ -110,7 +108,7 @@ resource "aws_security_group" "sg" {
   for_each = var.create_sg ? local.security_group_config : {}
 
   name   = each.value.name
-  vpc_id = aws_vpc.otms_vpc.id
+  vpc_id = aws_vpc.buildpiper_vpc.id
 
   tags = {
     Name  = each.value.name
@@ -154,6 +152,7 @@ resource "aws_security_group_rule" "egress" {
   source_security_group_id = each.value.rule_type == "sg" ? aws_security_group.sg[each.value.rule.source_sg_names[0]].id : null
 }
 
+
 ###################### EKS Cluster  ####################
 
 resource "aws_eks_cluster" "eks" {
@@ -162,7 +161,7 @@ resource "aws_eks_cluster" "eks" {
   version  = var.eks_cluster_version
 
   vpc_config {
-    subnet_ids = local.private_subnet_ids #### subnet id module 
+    subnet_ids = local.private_subnet_ids 
     security_group_ids = [
       for sg_key, sg in aws_security_group.sg : sg.id
       if sg_key != "public"
@@ -223,29 +222,6 @@ resource "aws_launch_template" "eks_launch_template" {
   }
 }
 
-resource "aws_eks_node_group" "eks_node_group" {
-  cluster_name    = aws_eks_cluster.eks.name
-  node_group_name = local.node_group_name
-  node_role_arn   = aws_iam_role.eks_node_role.arn
-  subnet_ids      = local.private_subnet_ids
-
-  launch_template {
-    id      = aws_launch_template.eks_launch_template.id
-    version = "$Latest"
-  }
-
-  scaling_config {
-    desired_size = var.node_group_desired_size
-    max_size     = var.node_group_max_size
-    min_size     = var.node_group_min_size
-  }
-
-  tags = {
-    Name  = local.node_group_name
-    env   = var.env
-    owner = var.owner
-  }
-}
 
 resource "aws_iam_role" "eks_node_role" {
   name = "eks-node-roles"
@@ -268,4 +244,53 @@ resource "aws_iam_role_policy_attachment" "eks_node_role_attachments" {
   for_each   = var.eks_node_role_policy_arns
   role       = aws_iam_role.eks_node_role.name
   policy_arn = each.value
+}
+
+
+resource "aws_eks_node_group" "app_node_group" {
+  cluster_name    = aws_eks_cluster.eks.name
+  node_group_name = "${local.node_group_name}-app"
+  node_role_arn   = aws_iam_role.eks_node_role.arn
+  subnet_ids      = local.application_subnet_ids
+
+  launch_template {
+    id      = aws_launch_template.eks_launch_template.id
+    version = "$Latest"
+  }
+
+  scaling_config {
+    desired_size = var.node_group_desired_size
+    max_size     = var.node_group_max_size
+    min_size     = var.node_group_min_size
+  }
+
+  tags = {
+    Name  = "${local.node_group_name}-app"
+    env   = var.env
+    owner = var.owner
+  }
+}
+
+resource "aws_eks_node_group" "db_node_group" {
+  cluster_name    = aws_eks_cluster.eks.name
+  node_group_name = "${local.node_group_name}-db"
+  node_role_arn   = aws_iam_role.eks_node_role.arn
+  subnet_ids      = local.database_subnet_ids
+
+  launch_template {
+    id      = aws_launch_template.eks_launch_template.id
+    version = "$Latest"
+  }
+
+  scaling_config {
+    desired_size = var.node_group_desired_size
+    max_size     = var.node_group_max_size
+    min_size     = var.node_group_min_size
+  }
+
+  tags = {
+    Name  = "${local.node_group_name}-db"
+    env   = var.env
+    owner = var.owner
+  }
 }
