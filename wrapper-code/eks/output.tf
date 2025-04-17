@@ -54,6 +54,9 @@ output "eks_cluster_endpoint" {
   description = "The endpoint of the EKS cluster"
   value       = module.compute_module.eks_cluster_endpoint
 }
+output "eks_cluster_sg" {
+  value = module.compute_module.eks_cluster_sg
+}
 
 ###################### Outputs for Node Group ####################
 
