@@ -92,7 +92,8 @@ eks_cluster_version = "1.32"
 eks_cluster_role_name = "eks-cluster-roles"
 eks_node_role_name    = "eks-node-roles"
 
-launch_template_name_prefix = "eks-node-launch-template"
+app_launch_template_name = "eks-node-app"
+db_launch_template_name  = "eks-node-db"
 
 app_instance_type = "t3.medium"
 db_instance_type  = "t3.medium"
