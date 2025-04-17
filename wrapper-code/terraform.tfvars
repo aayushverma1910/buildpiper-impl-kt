@@ -27,6 +27,14 @@ public_rt_cidr_block  = "0.0.0.0/0"
 private_rt_cidr_block = "0.0.0.0/0"
 public_subnet_indexes = [0, 5]
 
+#################### VPC Peering ########################
+
+peering_connection = true
+vpc_accept         = true
+manage_vpc         = "manage-buildpiper-vpc"
+public_rt_name     = "manage-buildpiper-public-rt"
+private_rt_name    = "manage-buildpiper-private-rt"
+
 #################### Security Groups ########################
 
 create_sg = true

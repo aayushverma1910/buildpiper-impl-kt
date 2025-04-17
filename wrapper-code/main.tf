@@ -26,7 +26,14 @@ module "networking_module" {
   private_rt_cidr_block = var.private_rt_cidr_block
   public_subnet_indexes = var.public_subnet_indexes
 
-  #################### Security Groups ########################
+  # VPC Peering 
+  peering_connection = var.peering_connection
+  vpc_accept         = var.vpc_accept
+  manage_vpc         = var.manage_vpc
+  public_rt_name     = var.public_rt_name
+  private_rt_name    = var.private_rt_name
+
+  # Security Groups 
 
   create_sg            = var.create_sg
   sg_names             = var.sg_names

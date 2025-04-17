@@ -108,6 +108,35 @@ variable "public_subnet_indexes" {
   default     = []
 }
 
+#################### VPC Peering ########################
+
+variable "peering_connection" {
+  type    = bool
+  default = true
+}
+
+variable "vpc_accept" {
+  type    = bool
+  default = true
+}
+variable "manage_vpc" {
+  description = "Name tag of the VPC to lookup"
+  type        = string
+  default     = ""
+}
+
+variable "public_rt_name" {
+  description = "Name tag of the public route table"
+  type        = string
+  default     = ""
+}
+
+variable "private_rt_name" {
+  description = "Name tag of the private route table"
+  type        = string
+  default     = ""
+}
+
 #################### Security Groups ########################
 
 
