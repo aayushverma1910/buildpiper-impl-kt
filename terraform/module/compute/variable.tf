@@ -57,6 +57,17 @@ variable "db_instance_type" {
   default     = ""
   description = "EC2 instance type for db worker nodes"
 }
+variable "ami_id" {
+  description = "AMI ID for the launch template"
+  type        = string
+  default     = ""
+}
+
+variable "key_name" {
+  description = "Optional key pair name for EC2 instances"
+  type        = string
+  default     = ""
+}
 
 variable "eks_cluster_role_policy_arns" {
   type = map(string)
@@ -111,6 +122,11 @@ variable "database_subnet_ids" {
   type    = list(string)
   default = []
 
+}
+
+variable "create_sg" {
+  type    = bool
+  default = true
 }
 
 variable "application_subnet_ids" {
