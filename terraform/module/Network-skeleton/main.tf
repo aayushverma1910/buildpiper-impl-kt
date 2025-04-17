@@ -65,6 +65,14 @@ resource "aws_route_table" "public_rt" {
     cidr_block = var.public_rt_cidr_block
     gateway_id = aws_internet_gateway.IGW.id
   }
+dynamic "route" {
+    for_each = var.peering_connection ? [1] : []
+    content {
+      cidr_block                = data.aws_vpc.manage_vpc[0].cidr_block
+      vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
+    }
+  }
+
   tags = {
     Name  = local.public_rt_name
     env   = var.env
@@ -76,6 +84,13 @@ resource "aws_route_table" "private_rt" {
   route {
     cidr_block     = var.private_rt_cidr_block
     nat_gateway_id = aws_nat_gateway.NAT_GW.id
+  }
+  dynamic "route" {
+    for_each = var.peering_connection ? [1] : []
+    content {
+      cidr_block                = data.aws_vpc.manage_vpc[0].cidr_block
+      vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
+    }
   }
 
   tags = {
@@ -100,6 +115,23 @@ resource "aws_route_table_association" "private_rt_association" {
 
   subnet_id      = each.value
   route_table_id = aws_route_table.private_rt.id
+}
+
+#################### VPC Peering ######################## 
+
+resource "aws_vpc_peering_connection" "vpc_peering" {
+  count       = var.peering_connection ? 1 : 0
+  peer_vpc_id = aws_vpc.otms_vpc.id
+  vpc_id      = data.aws_vpc.manage_vpc[0].id
+  auto_accept = var.vpc_accept
+}
+
+resource "aws_route" "manage_to_otms_vpc_peer" {
+  count                     = var.peering_connection ? 1 : 0
+  route_table_id            = data.aws_route_table.manage_public_rt[0].id
+  destination_cidr_block    = aws_vpc.otms_vpc.cidr_block
+  vpc_peering_connection_id = var.peering_connection ? aws_vpc_peering_connection.vpc_peering[0].id : null
+  depends_on                = [aws_vpc_peering_connection.vpc_peering]
 }
 
 #################### Security Groups ########################
