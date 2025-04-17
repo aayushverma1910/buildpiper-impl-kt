@@ -7,7 +7,6 @@ resource "aws_eks_cluster" "eks" {
 
   vpc_config {
     subnet_ids              = var.private_subnet_ids
-    security_group_ids      = var.eks_security_group_ids
     endpoint_private_access = var.endpoint_private_access
     endpoint_public_access  = var.endpoint_public_access
   }
@@ -48,14 +47,15 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
   policy_arn = each.value
 }
 
-###################### Node Group  ####################
+###################### App Node Group  ####################
 
 resource "aws_launch_template" "eks_app_launch_template" {
-  name_prefix   = var.launch_template_name_prefix
+  name_prefix   = local.app_lt_name
   instance_type = var.app_instance_type
 
   network_interfaces {
     associate_public_ip_address = false
+    security_groups             = [var.eks_security_group_ids[0]]
   }
 
   tag_specifications {
@@ -117,12 +117,15 @@ resource "aws_eks_node_group" "app_node_group" {
 }
 
 
+###################### DB Node Group  ####################
+
 resource "aws_launch_template" "eks_db_launch_template" {
-  name_prefix   = var.launch_template_name_prefix
+  name_prefix   = local.db_lt_name
   instance_type = var.db_instance_type
 
   network_interfaces {
     associate_public_ip_address = false
+    security_groups             = [var.eks_security_group_ids[1]]
   }
 
   tag_specifications {
