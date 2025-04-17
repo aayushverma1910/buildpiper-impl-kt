@@ -52,10 +52,13 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
 resource "aws_launch_template" "eks_app_launch_template" {
   name_prefix   = local.app_lt_name
   instance_type = var.app_instance_type
+  image_id      = var.ami_id != "" ? var.key_name : null
+
+  key_name = var.key_name != "" ? var.key_name : null
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [var.eks_security_group_ids[0]]
+    security_groups             = var.create_sg && length(var.eks_security_group_ids) > 0 ? [var.eks_security_group_ids[0]] : []
   }
 
   tag_specifications {
@@ -122,10 +125,13 @@ resource "aws_eks_node_group" "app_node_group" {
 resource "aws_launch_template" "eks_db_launch_template" {
   name_prefix   = local.db_lt_name
   instance_type = var.db_instance_type
+  image_id      = var.ami_id != "" ? var.key_name : null
+
+  key_name = var.key_name != "" ? var.key_name : null
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [var.eks_security_group_ids[1]]
+    security_groups             = var.create_sg && length(var.eks_security_group_ids) > 1 ? [var.eks_security_group_ids[1]] : []
   }
 
   tag_specifications {
