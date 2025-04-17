@@ -35,7 +35,12 @@ variable "eks_node_role_name" {
   default     = ""
 }
 
-variable "launch_template_name_prefix" {
+variable "app_launch_template_name" {
+  type        = string
+  description = "Prefix for launch template"
+  default     = ""
+}
+variable "db_launch_template_name" {
   type        = string
   description = "Prefix for launch template"
   default     = ""
@@ -103,18 +108,18 @@ variable "endpoint_public_access" {
 }
 
 variable "database_subnet_ids" {
-  type = list(string)
-  default = [ ]
+  type    = list(string)
+  default = []
 
 }
 
 variable "application_subnet_ids" {
-  type = list(string)
-  default = [ ]
+  type    = list(string)
+  default = []
 
 }
 
 variable "private_subnet_ids" {
-  type = list(string)
-  default = [ ]
+  type    = list(string)
+  default = []
 }
