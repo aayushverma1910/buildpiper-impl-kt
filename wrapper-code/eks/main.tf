@@ -54,6 +54,8 @@ module "compute_module" {
   app_instance_type            = var.app_instance_type
   db_launch_template_name      = var.db_launch_template_name
   db_instance_type             = var.db_instance_type
+  ami_id                       = var.ami_id
+  key_name                     = var.key_name
   eks_cluster_role_policy_arns = var.eks_cluster_role_policy_arns
   eks_node_role_policy_arns    = var.eks_node_role_policy_arns
   node_group_desired_size      = var.node_group_desired_size
