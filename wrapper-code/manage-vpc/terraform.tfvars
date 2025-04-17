@@ -1,4 +1,4 @@
-region       = "us-east-1"
+region       = "us-east-2"
 project_name = "buildpiper"
 env          = "manage"
 owner        = "aayush"
@@ -14,7 +14,7 @@ instance_tenancy     = "default"
 
 subnet_names = ["public", "private"]
 subnet_cidrs = ["10.0.0.0/22", "10.0.4.0/22"]
-subnet_azs   = ["us-east-1a", "us-east-1a"]
+subnet_azs   = ["us-east-2a", "us-east-2a"]
 
 #################### Route Table ########################
 
