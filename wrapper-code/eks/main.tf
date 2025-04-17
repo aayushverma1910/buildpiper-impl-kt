@@ -50,8 +50,9 @@ module "compute_module" {
   eks_node_role_name           = var.eks_node_role_name
   endpoint_private_access      = var.endpoint_private_access
   endpoint_public_access       = var.endpoint_public_access
-  launch_template_name_prefix  = var.launch_template_name_prefix
+  app_launch_template_name     = var.app_launch_template_name
   app_instance_type            = var.app_instance_type
+  db_launch_template_name      = var.db_launch_template_name
   db_instance_type             = var.db_instance_type
   eks_cluster_role_policy_arns = var.eks_cluster_role_policy_arns
   eks_node_role_policy_arns    = var.eks_node_role_policy_arns
