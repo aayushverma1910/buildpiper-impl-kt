@@ -103,17 +103,25 @@ endpoint_public_access  = false
 ami_type = "AL2023_x86_64_STANDARD"
 key_pair = "eks"
 
-app_capacity_type = "ON_DEMAND"
-app_instance_type = ["t3.medium"]
-app_disk_size     = 25
+app_capacity_type         = "ON_DEMAND"
+app_instance_type         = "t3.medium"
+associate_public_ip_app   = false
+delete_on_termination_app = true
+app_encrypted             = true
+ebs_app_volume_size       = "25"
+ebs_app_volume_type       = "gp2"
 
 node_group_app_desired_size = 1
 node_group_app_max_size     = 2
 node_group_app_min_size     = 1
 
-db_capacity_type = "ON_DEMAND"
-db_instance_type = ["t3.medium"]
-db_disk_size     = 25
+db_capacity_type         = "ON_DEMAND"
+db_instance_type         = "t3.medium"
+associate_public_ip_db   = false
+delete_on_termination_db = true
+db_encrypted             = true
+ebs_db_volume_size       = "25"
+ebs_db_volume_type       = "gp2"
 
 node_group_db_desired_size = 1
 node_group_db_max_size     = 2
