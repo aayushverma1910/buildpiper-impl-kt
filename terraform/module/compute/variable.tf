@@ -151,10 +151,16 @@ variable "eks_sg_rule" {
 ###################### Node Group  ####################
 
 variable "ami_type" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "value of ami_type for db"
-  
+
+}
+
+variable "key_pair" {
+  description = "Optional key pair name for EC2 instances"
+  type        = string
+  default     = ""
 }
 
 
@@ -167,19 +173,45 @@ variable "application_subnet_ids" {
 }
 
 variable "app_capacity_type" {
-  type = string
-  default = ""
-  description = "value of capacity_type for db"
+  type        = string
+  default     = ""
+  description = "value of capacity_type for app"
 }
 
-variable "app_instance_type" {
-  type = list(string)
-  default = []
-  description = "value of instance_type for db"
+variable "associate_public_ip_app" {
+  type        = bool
+  description = "value of associate_public_ip_address for app"
 }
-variable "app_disk_size" {
-  type = number
-  description = "value of disk_size for db"
+
+variable "delete_on_termination_app" {
+  type        = bool
+  description = "value of delete_on_termination for app"
+
+}
+
+variable "app_encrypted" {
+  type        = bool
+  description = "value of encrypted for app"
+}
+
+
+variable "app_instance_type" {
+  type        = string
+  default     = ""
+  description = "EC2 instance type for app worker nodes"
+}
+
+variable "ebs_app_volume_size" {
+  type        = string
+  default     = ""
+  description = "EBS volume size for app worker nodes"
+}
+
+variable "ebs_app_volume_type" {
+  type        = string
+  default     = ""
+  description = "EBS volume type for app worker nodes"
+
 }
 
 variable "node_group_app_desired_size" {
@@ -199,73 +231,86 @@ variable "node_group_app_min_size" {
 
 
 variable "app_taint_key" {
-  type = string
-  default = "dedicated"
+  type        = string
+  default     = "dedicated"
   description = "value of taint_key for app"
 }
- variable "app_taint_value" {
-  type = string
-  default = "application"
-  description = "value of taint_value for app"  
- }
+variable "app_taint_value" {
+  type        = string
+  default     = "application"
+  description = "value of taint_value for app"
+}
 
- variable "app_taint_effect" {
+variable "app_taint_effect" {
   type        = string
   default     = "NO_SCHEDULE"
-  description = "value of taint_effect for app"  
+  description = "value of taint_effect for app"
 
- }
+}
 
 
 
 ####### DB Node Group  ######
 
 variable "db_taint_key" {
-  type = string
-  default = "dedicated"
-  description = "value of taint_key for app"
+  type        = string
+  default     = "dedicated"
+  description = "value of taint_key for db"
 }
- variable "db_taint_value" {
-  type = string
-  default = "database"
-  description = "value of taint_value for app"  
- }
+variable "db_taint_value" {
+  type        = string
+  default     = "database"
+  description = "value of taint_value for db"
+}
 
- variable "db_taint_effect" {
+variable "db_taint_effect" {
   type        = string
   default     = "NO_SCHEDULE"
-  description = "value of taint_effect for app"  
+  description = "value of taint_effect for db"
 
- }
+}
 
 
 variable "db_capacity_type" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "value of capacity_type for db"
 }
 
+variable "associate_public_ip_db" {
+  type        = bool
+  description = "value of associate_public_ip_address for db"
+}
+
+variable "delete_on_termination_db" {
+  type        = bool
+  description = "value of delete_on_termination for db"
+
+}
+
+variable "db_encrypted" {
+  type        = bool
+  description = "value of encrypted for db"
+}
+
+
 variable "db_instance_type" {
-  type = list(string)
-  default = []
-  description = "value of instance_type for db"
-}
-
-variable "db_disk_size" {
-  type = number
-  description = "value of disk_size for db"
-}
-
-variable "ami_id" {
-  description = "AMI ID for the launch template"
   type        = string
   default     = ""
+  description = "EC2 instance type for db worker nodes"
 }
 
-variable "key_pair" {
-  description = "Optional key pair name for EC2 instances"
+variable "ebs_db_volume_size" {
   type        = string
-  default     = ""
+  default     = "25"
+  description = "EBS volume size for db worker nodes"
+}
+
+variable "ebs_db_volume_type" {
+  type        = string
+  default     = "gp3"
+  description = "EBS volume type for db worker nodes"
+
 }
 
 
