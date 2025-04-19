@@ -111,7 +111,7 @@ variable "public_subnet_indexes" {
 #################### VPC Peering ########################
 
 variable "peering_connection" {
-  type    = bool
+  type = bool
 }
 
 variable "vpc_accept" {
@@ -145,11 +145,11 @@ variable "eks_cluster_version" {
 }
 
 variable "endpoint_private_access" {
-  type    = bool
+  type = bool
 }
 
 variable "endpoint_public_access" {
-  type    = bool
+  type = bool
 
 }
 
@@ -328,15 +328,15 @@ variable "ebs_app_volume_type" {
 }
 
 variable "node_group_app_desired_size" {
-  type    = number
+  type = number
 }
 
 variable "node_group_app_max_size" {
-  type    = number
+  type = number
 }
 
 variable "node_group_app_min_size" {
-  type    = number
+  type = number
 
 }
 
@@ -425,15 +425,15 @@ variable "ebs_db_volume_type" {
 }
 
 variable "node_group_db_desired_size" {
-  type    = number
+  type = number
 }
 
 variable "node_group_db_max_size" {
-  type    = number
+  type = number
 }
 
 variable "node_group_db_min_size" {
-  type    = number
+  type = number
 }
 
 variable "database_subnet_ids" {
