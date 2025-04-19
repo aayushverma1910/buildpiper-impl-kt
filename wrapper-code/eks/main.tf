@@ -37,10 +37,10 @@ module "networking_module" {
 }
 
 module "compute_module" {
-  source                       = "git::https://github.com/aayushverma1910/buildpiper-impl-kt.git//terraform/module/compute?ref=terraform-module"
-  env                          = var.env
-  owner                        = var.owner
-  project_name                 = var.project_name
+  source       = "git::https://github.com/aayushverma1910/buildpiper-impl-kt.git//terraform/module/compute?ref=terraform-module"
+  env          = var.env
+  owner        = var.owner
+  project_name = var.project_name
 
   # cluster  
 
@@ -68,7 +68,11 @@ module "compute_module" {
 
   app_capacity_type           = var.app_capacity_type
   app_instance_type           = var.app_instance_type
-  app_disk_size               = var.app_disk_size
+  associate_public_ip_app     = var.associate_public_ip_app
+  delete_on_termination_app   = var.delete_on_termination_app
+  app_encrypted               = var.app_encrypted
+  ebs_app_volume_size         = var.ebs_app_volume_size
+  ebs_app_volume_type         = var.ebs_app_volume_type
   node_group_app_desired_size = var.node_group_app_desired_size
   node_group_app_max_size     = var.node_group_app_max_size
   node_group_app_min_size     = var.node_group_app_min_size
@@ -78,7 +82,11 @@ module "compute_module" {
 
   db_capacity_type           = var.db_capacity_type
   db_instance_type           = var.db_instance_type
-  db_disk_size               = var.db_disk_size
+  associate_public_ip_db     = var.associate_public_ip_db
+  delete_on_termination_db   = var.delete_on_termination_db
+  db_encrypted               = var.db_encrypted
+  ebs_db_volume_size         = var.ebs_db_volume_size
+  ebs_db_volume_type         = var.ebs_db_volume_type
   node_group_db_desired_size = var.node_group_db_desired_size
   node_group_db_max_size     = var.node_group_db_max_size
   node_group_db_min_size     = var.node_group_db_min_size
