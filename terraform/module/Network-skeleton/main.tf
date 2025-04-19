@@ -142,3 +142,4 @@ resource "aws_route" "peer_private_rt" {
   destination_cidr_block    = aws_vpc.otms_vpc.cidr_block
   vpc_peering_connection_id = var.peering_connection ? aws_vpc_peering_connection.vpc_peering[0].id : null
   depends_on                = [aws_vpc_peering_connection.vpc_peering]
+
