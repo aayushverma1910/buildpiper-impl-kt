@@ -128,7 +128,7 @@ resource "aws_vpc_peering_connection" "vpc_peering" {
   auto_accept = var.vpc_accept
 }
 
-resource "aws_route" "manage_to_otms_vpc_peer" {
+resource "aws_route" "peer_public_rt" {
   count                     = var.peering_connection ? 1 : 0
   route_table_id            = data.aws_route_table.manage_public_rt[0].id
   destination_cidr_block    = aws_vpc.otms_vpc.cidr_block
@@ -136,3 +136,9 @@ resource "aws_route" "manage_to_otms_vpc_peer" {
   depends_on                = [aws_vpc_peering_connection.vpc_peering]
 }
 
+resource "aws_route" "peer_private_rt" {
+  count                     = var.peering_connection ? 1 : 0
+  route_table_id            = data.aws_route_table.manage_private_rt[0].id
+  destination_cidr_block    = aws_vpc.otms_vpc.cidr_block
+  vpc_peering_connection_id = var.peering_connection ? aws_vpc_peering_connection.vpc_peering[0].id : null
+  depends_on                = [aws_vpc_peering_connection.vpc_peering]
