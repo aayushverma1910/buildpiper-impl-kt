@@ -12,6 +12,16 @@ locals {
 }
 
 
+####################### Launch Template  ####################
+locals {
+  app_lt_name = "${var.env}-${var.project_name}-eks-app-lt"
+}
+
+locals {
+  db_lt_name = "${var.env}-${var.project_name}-eks-app-lt"
+}
+
+
 #################### Security Groups ########################
 
 locals {
@@ -104,11 +114,11 @@ locals {
   eks_sg_rules_flat = flatten([
     for sg_name, rules in local.eks_sg_rules : [
       for idx, rule in rules : {
-        key           = "${sg_name}-${idx}"
-        from_port     = rule.from_port
-        to_port       = rule.to_port
-        protocol      = rule.protocol
-        source_sg_id  = rule.source_sg_id
+        key          = "${sg_name}-${idx}"
+        from_port    = rule.from_port
+        to_port      = rule.to_port
+        protocol     = rule.protocol
+        source_sg_id = rule.source_sg_id
       }
     ]
   ])
