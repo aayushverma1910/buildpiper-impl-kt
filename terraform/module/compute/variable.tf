@@ -216,34 +216,34 @@ variable "ebs_app_volume_type" {
 
 variable "node_group_app_desired_size" {
   type    = number
-  default = 2
+
 }
 
 variable "node_group_app_max_size" {
   type    = number
-  default = 3
+
 }
 
 variable "node_group_app_min_size" {
   type    = number
-  default = 1
+
 }
 
 
 variable "app_taint_key" {
   type        = string
-  default     = "dedicated"
+  default     = ""
   description = "value of taint_key for app"
 }
 variable "app_taint_value" {
   type        = string
-  default     = "application"
+  default     = ""
   description = "value of taint_value for app"
 }
 
 variable "app_taint_effect" {
   type        = string
-  default     = "NO_SCHEDULE"
+  default     = ""
   description = "value of taint_effect for app"
 
 }
@@ -254,18 +254,18 @@ variable "app_taint_effect" {
 
 variable "db_taint_key" {
   type        = string
-  default     = "dedicated"
+  default     = ""
   description = "value of taint_key for db"
 }
 variable "db_taint_value" {
   type        = string
-  default     = "database"
+  default     = ""
   description = "value of taint_value for db"
 }
 
 variable "db_taint_effect" {
   type        = string
-  default     = "NO_SCHEDULE"
+  default     = ""
   description = "value of taint_effect for db"
 
 }
@@ -302,31 +302,27 @@ variable "db_instance_type" {
 
 variable "ebs_db_volume_size" {
   type        = string
-  default     = "25"
+  default     = ""
   description = "EBS volume size for db worker nodes"
 }
 
 variable "ebs_db_volume_type" {
   type        = string
-  default     = "gp3"
+  default     = ""
   description = "EBS volume type for db worker nodes"
 
 }
 
-
 variable "node_group_db_desired_size" {
   type    = number
-  default = 2
 }
 
 variable "node_group_db_max_size" {
   type    = number
-  default = 3
 }
 
 variable "node_group_db_min_size" {
   type    = number
-  default = 1
 }
 
 variable "database_subnet_ids" {
