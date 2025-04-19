@@ -34,8 +34,9 @@ output "database_subnet_ids" {
   value = module.networking_module.database_subnet_ids
 }
 output "eks_security_group_ids" {
-  value = module.networking_module.eks_security_group_ids
+  value = module.compute_module.eks_security_group_ids
 }
+
 
 
 ###################### Outputs for EKS Cluster ####################
