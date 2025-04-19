@@ -32,9 +32,4 @@ output "application_subnet_ids" {
 output "database_subnet_ids" {
   value = local.database_subnet_ids
 }
-output "eks_security_group_ids" {
-  value = [
-    for sg_key, sg in aws_security_group.sg : sg.id
-    if sg_key != "public"
-  ]
-}
+
