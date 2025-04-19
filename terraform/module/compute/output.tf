@@ -13,6 +13,14 @@ output "eks_cluster_arn" {
 output "eks_cluster_endpoint" {
   description = "The endpoint of the EKS cluster"
   value       = aws_eks_cluster.eks.endpoint
+
+}
+
+output "eks_security_group_ids" {
+  value = [
+    for sg_key, sg in aws_security_group.sg : sg.id
+    if sg_key != "public"
+  ]
 }
 
 output "eks_cluster_sg" {
@@ -34,3 +42,4 @@ output "eks_node_group_role_arn" {
   description = "The ARN of the node group role"
   value       = aws_iam_role.eks_node_role.arn
 }
+
