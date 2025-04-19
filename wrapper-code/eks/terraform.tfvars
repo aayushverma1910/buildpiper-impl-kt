@@ -110,10 +110,14 @@ delete_on_termination_app = true
 app_encrypted             = true
 ebs_app_volume_size       = "25"
 ebs_app_volume_type       = "gp2"
+app_taint_key             = "dedicated"
+app_taint_value           = "application"
+app_taint_effect          = "NO_SCHEDULE"
 
 node_group_app_desired_size = 1
 node_group_app_max_size     = 2
 node_group_app_min_size     = 1
+
 
 db_capacity_type         = "ON_DEMAND"
 db_instance_type         = "t3.medium"
@@ -122,6 +126,9 @@ delete_on_termination_db = true
 db_encrypted             = true
 ebs_db_volume_size       = "25"
 ebs_db_volume_type       = "gp2"
+db_taint_key             = "dedicated"
+db_taint_value           = "database"
+db_taint_effect          = "NO_SCHEDULE"
 
 node_group_db_desired_size = 1
 node_group_db_max_size     = 2
