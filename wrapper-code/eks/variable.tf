@@ -112,7 +112,6 @@ variable "public_subnet_indexes" {
 
 variable "peering_connection" {
   type    = bool
-  default = true
 }
 
 variable "vpc_accept" {
@@ -147,13 +146,10 @@ variable "eks_cluster_version" {
 
 variable "endpoint_private_access" {
   type    = bool
-  default = true
-
 }
 
 variable "endpoint_public_access" {
   type    = bool
-  default = false
 
 }
 
@@ -242,7 +238,6 @@ variable "sg_ingress_type" {
 variable "create_sg" {
   description = "Set to true to create security groups"
   type        = bool
-  default     = true
 }
 
 
@@ -269,8 +264,14 @@ variable "eks_sg_rule" {
 variable "ami_type" {
   type        = string
   default     = ""
-  description = "value of ami_type for db"
+  description = "value of ami_type"
 
+}
+
+variable "key_pair" {
+  description = "Optional key pair name for EC2 instances"
+  type        = string
+  default     = ""
 }
 
 
@@ -285,49 +286,75 @@ variable "application_subnet_ids" {
 variable "app_capacity_type" {
   type        = string
   default     = ""
-  description = "value of capacity_type for db"
+  description = "value of capacity_type for app"
 }
 
-variable "app_instance_type" {
-  type        = list(string)
-  default     = []
-  description = "value of instance_type for db"
+####
+variable "associate_public_ip_app" {
+  type        = bool
+  description = "value of associate_public_ip_address for app"
 }
-variable "app_disk_size" {
-  type        = number
-  description = "value of disk_size for db"
+
+variable "delete_on_termination_app" {
+  type        = bool
+  description = "value of delete_on_termination for app"
+
+}
+
+variable "app_encrypted" {
+  type        = bool
+  description = "value of encrypted for app"
+}
+
+####
+
+variable "app_instance_type" {
+  type        = string
+  default     = ""
+  description = "EC2 instance type for app worker nodes"
+}
+
+variable "ebs_app_volume_size" {
+  type        = string
+  default     = ""
+  description = "EBS volume size for app worker nodes"
+}
+
+variable "ebs_app_volume_type" {
+  type        = string
+  default     = ""
+  description = "EBS volume type for app worker nodes"
+
 }
 
 variable "node_group_app_desired_size" {
   type    = number
-  default = 2
 }
 
 variable "node_group_app_max_size" {
   type    = number
-  default = 3
 }
 
 variable "node_group_app_min_size" {
   type    = number
-  default = 1
+
 }
 
 
 variable "app_taint_key" {
   type        = string
-  default     = "dedicated"
+  default     = ""
   description = "value of taint_key for app"
 }
 variable "app_taint_value" {
   type        = string
-  default     = "application"
+  default     = ""
   description = "value of taint_value for app"
 }
 
 variable "app_taint_effect" {
   type        = string
-  default     = "NO_SCHEDULE"
+  default     = ""
   description = "value of taint_effect for app"
 
 }
@@ -338,22 +365,21 @@ variable "app_taint_effect" {
 
 variable "db_taint_key" {
   type        = string
-  default     = "dedicated"
-  description = "value of taint_key for app"
+  default     = ""
+  description = "value of taint_key for db"
 }
 variable "db_taint_value" {
   type        = string
-  default     = "database"
-  description = "value of taint_value for app"
+  default     = ""
+  description = "value of taint_value for db"
 }
 
 variable "db_taint_effect" {
   type        = string
-  default     = "NO_SCHEDULE"
-  description = "value of taint_effect for app"
+  default     = ""
+  description = "value of taint_effect for db"
 
 }
-
 
 variable "db_capacity_type" {
   type        = string
@@ -361,43 +387,53 @@ variable "db_capacity_type" {
   description = "value of capacity_type for db"
 }
 
+###
+variable "associate_public_ip_db" {
+  type        = bool
+  description = "value of associate_public_ip_address for db"
+}
+
+variable "delete_on_termination_db" {
+  type        = bool
+  description = "value of delete_on_termination for db"
+
+}
+
+variable "db_encrypted" {
+  type        = bool
+  description = "value of encrypted for db"
+}
+
+###
 variable "db_instance_type" {
-  type        = list(string)
-  default     = []
-  description = "value of instance_type for db"
-}
-
-variable "db_disk_size" {
-  type        = number
-  description = "value of disk_size for db"
-}
-
-variable "ami_id" {
-  description = "AMI ID for the launch template"
   type        = string
   default     = ""
+  description = "EC2 instance type for db worker nodes"
 }
 
-variable "key_pair" {
-  description = "Optional key pair name for EC2 instances"
+variable "ebs_db_volume_size" {
   type        = string
   default     = ""
+  description = "EBS volume size for app worker nodes"
 }
 
+variable "ebs_db_volume_type" {
+  type        = string
+  default     = ""
+  description = "EBS volume type for db worker nodes"
+
+}
 
 variable "node_group_db_desired_size" {
   type    = number
-  default = 2
 }
 
 variable "node_group_db_max_size" {
   type    = number
-  default = 3
 }
 
 variable "node_group_db_min_size" {
   type    = number
-  default = 1
 }
 
 variable "database_subnet_ids" {
