@@ -35,9 +35,12 @@ manage_vpc         = "manage-buildpiper-vpc"
 public_rt_name     = "manage-buildpiper-public-rt"
 private_rt_name    = "manage-buildpiper-private-rt"
 
+
+
+
 #################### Security Groups ########################
 
-create_sg = false
+create_sg = true
 sg_names  = ["application-node", "database-node"]
 
 ########### application Security Groups ##########
@@ -45,15 +48,9 @@ security_groups_rule = {
   application-node = {
     name = "application-node"
     ingress_rules = [
-      { from_port = 0, to_port = 0, protocol = "-1", description = "Allow all outbound", cidr_blocks = ["0.0.0.0/0"] },
-      { from_port = 22, to_port = 22, protocol = "tcp", description = "HTTPS access", cidr_blocks = ["192.168.0.0/24"] },
-      { from_port = 1025, to_port = 65535, protocol = "tcp", description = "Allow control plane to node communication", cidr_blocks = ["0.0.0.0/0"] }, # Allow kubelet and control plane communication
-      { from_port = 0, to_port = 65535, protocol = "-1", description = "Allow node-to-node communication", cidr_blocks = ["0.0.0.0/0"] },              # Node-to-node communication (pods can talk across nodes)
-      { from_port = 3000, to_port = 3000, protocol = "tcp", description = "HTTP access", cidr_blocks = ["192.168.0.0/24"] },
-      { from_port = 8080, to_port = 8080, protocol = "tcp", description = "HTTP access", cidr_blocks = ["192.168.0.0/24"] },
-      { from_port = 8081, to_port = 8081, protocol = "tcp", description = "HTTP access", cidr_blocks = ["192.168.0.0/24"] },
-      { from_port = 8082, to_port = 8082, protocol = "tcp", description = "HTTP access", cidr_blocks = ["192.168.0.0/24"] }
-
+      { from_port = 0, to_port = 0, protocol = "-1", description = "Allow all inbount", cidr_blocks = ["0.0.0.0/0"] },
+      { from_port = 443, to_port = 443, protocol = "tcp", description = "Allow HTTPs traffic", source_sg_names = ["eks-cluster"] },
+      { from_port = 10250, to_port = 10250, protocol = "tcp", description = "Allow kubelet communication from EKS control plane", source_sg_names = ["eks-cluster"] }
     ]
     egress_rules = [
       { from_port = 0, to_port = 0, protocol = "-1", description = "Allow all outbound", cidr_blocks = ["0.0.0.0/0"] }
@@ -64,14 +61,9 @@ security_groups_rule = {
   database-node = {
     name = "database-node"
     ingress_rules = [
-      { from_port = 0, to_port = 0, protocol = "-1", description = "Allow all outbound", cidr_blocks = ["0.0.0.0/0"] },
-      { from_port = 22, to_port = 22, protocol = "tcp", description = "HTTPS access", cidr_blocks = ["192.168.0.0/24"] },
-      { from_port = 1025, to_port = 65535, protocol = "tcp", description = "Allow control plane to node communication", cidr_blocks = ["0.0.0.0/0"] }, # Allow kubelet and control plane communication
-      { from_port = 0, to_port = 65535, protocol = "-1", description = "Allow node-to-node communication", cidr_blocks = ["0.0.0.0/0"] },
-      { from_port = 5432, to_port = 5432, protocol = "tcp", description = "HTTP access for postgresql", source_sg_names = ["application-node"] },
-      { from_port = 6379, to_port = 6379, protocol = "tcp", description = "HTTP access for redis", source_sg_names = ["application-node"] },
-      { from_port = 9042, to_port = 9042, protocol = "tcp", description = "HTTP access", source_sg_names = ["application-node"] }
-
+      { from_port = 0, to_port = 0, protocol = "-1", description = "Allow all inbound", cidr_blocks = ["0.0.0.0/0"] },
+      { from_port = 443, to_port = 443, protocol = "tcp", description = "Allow HTTPs traffic", source_sg_names = ["eks-cluster"] },
+      { from_port = 10250, to_port = 10250, protocol = "tcp", description = "Allow kubelet communication from EKS control plane", source_sg_names = ["eks-cluster"] }
     ]
     egress_rules = [
       { from_port = 0, to_port = 0, protocol = "-1", description = "Allow all outbound", cidr_blocks = ["0.0.0.0/0"] }
@@ -79,20 +71,54 @@ security_groups_rule = {
   }
 }
 
+######## Cluster Security Groups ##########
+
+eks_sg_rule = [
+  {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+  },
+  {
+    from_port = 10250
+    to_port   = 10250
+    protocol  = "tcp"
+  },
+  {
+    from_port = 1024
+    to_port   = 65535
+    protocol  = "-1"
+  }
+]
+
 ################## EKS Cluster ##############################
 eks_cluster_version = "1.32"
 
-eks_cluster_role_name = "eks-cluster-roles"
-eks_node_role_name    = "eks-node-roles"
+eks_cluster_role_name   = "eks-cluster-roles"
+eks_node_role_name      = "eks-node-roles"
+endpoint_private_access = true
+endpoint_public_access  = false
 
-app_launch_template_name = "eks-node-app"
-db_launch_template_name  = "eks-node-db"
 
-app_instance_type = "t3.medium"
-db_instance_type  = "t3.medium"
+ami_type = "AL2023_x86_64_STANDARD"
+key_pair = "eks"
 
-ami_id   = ""
-key_name = ""
+app_capacity_type = "ON_DEMAND"
+app_instance_type = ["t3.medium"]
+app_disk_size     = 25
+
+node_group_app_desired_size = 1
+node_group_app_max_size     = 2
+node_group_app_min_size     = 1
+
+db_capacity_type = "ON_DEMAND"
+db_instance_type = ["t3.medium"]
+db_disk_size     = 25
+
+node_group_db_desired_size = 1
+node_group_db_max_size     = 2
+node_group_db_min_size     = 1
+
 
 eks_cluster_role_policy_arns = {
   eks_cluster_node = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
@@ -103,11 +129,4 @@ eks_node_role_policy_arns = {
   eks_cni         = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   ec2_readonly    = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
-
-endpoint_private_access = true
-endpoint_public_access  = false
-
-node_group_desired_size = 2
-node_group_max_size     = 3
-node_group_min_size     = 1
 
