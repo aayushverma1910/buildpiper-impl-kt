@@ -137,8 +137,67 @@ variable "private_rt_name" {
   default     = ""
 }
 
+###################### EKS Cluster  ####################
+
+variable "eks_cluster_version" {
+  type        = string
+  description = "EKS Kubernetes version"
+  default     = ""
+}
+
+variable "endpoint_private_access" {
+  type    = bool
+  default = true
+
+}
+
+variable "endpoint_public_access" {
+  type    = bool
+  default = false
+
+}
+
+
+variable "private_subnet_ids" {
+  type    = list(string)
+  default = []
+}
+
+################# Policy
+
+variable "eks_cluster_role_name" {
+  type        = string
+  description = "IAM Role name for EKS cluster"
+  default     = ""
+}
+
+variable "eks_cluster_role_policy_arns" {
+  type = map(string)
+  default = {
+    eks_cluster_node = ""
+  }
+}
+
+variable "eks_node_role_policy_arns" {
+  type = map(string)
+  default = {
+    eks_worker_node = ""
+    eks_cni         = ""
+    ec2_readonly    = ""
+  }
+}
+
+variable "eks_node_role_name" {
+  type        = string
+  description = "IAM Role name for EKS cluster"
+  default     = ""
+}
+
+
+
 #################### Security Groups ########################
 
+#node sg
 
 variable "sg_names" {
   description = "List of security group keys/names"
@@ -186,87 +245,7 @@ variable "create_sg" {
   default     = true
 }
 
-################################
 
-variable "eks_cluster_version" {
-  type        = string
-  description = "EKS Kubernetes version"
-  default     = ""
-}
-variable "eks_cluster_role_name" {
-  type        = string
-  description = "IAM Role name for EKS cluster"
-  default     = ""
-}
-
-variable "app_launch_template_name" {
-  type        = string
-  description = "Prefix for launch template"
-  default     = ""
-}
-variable "db_launch_template_name" {
-  type        = string
-  description = "Prefix for launch template"
-  default     = ""
-}
-variable "eks_node_role_name" {
-  type        = string
-  description = "IAM Role name for EKS cluster"
-  default     = ""
-}
-
-variable "app_instance_type" {
-  type        = string
-  default     = ""
-  description = "EC2 instance type for worker nodes"
-}
-variable "db_instance_type" {
-  type        = string
-  default     = ""
-  description = "EC2 instance type for db worker nodes"
-}
-variable "ami_id" {
-  description = "AMI ID for the launch template"
-  type        = string
-  default     = ""
-}
-
-variable "key_name" {
-  description = "Optional key pair name for EC2 instances"
-  type        = string
-  default     = ""
-}
-
-variable "eks_node_role_policy_arns" {
-  type = map(string)
-  default = {
-    eks_worker_node = ""
-    eks_cni         = ""
-    ec2_readonly    = ""
-  }
-}
-
-variable "eks_cluster_role_policy_arns" {
-  type = map(string)
-  default = {
-    eks_cluster_node = ""
-  }
-}
-
-variable "node_group_desired_size" {
-  type    = number
-  default = 2
-}
-
-variable "node_group_max_size" {
-  type    = number
-  default = 3
-}
-
-variable "node_group_min_size" {
-  type    = number
-  default = 1
-}
 
 variable "eks_security_group_ids" {
   description = "List of security group IDs for the EKS cluster."
@@ -274,14 +253,161 @@ variable "eks_security_group_ids" {
   default     = []
 }
 
-variable "endpoint_private_access" {
-  type    = bool
-  default = true
+### cluster sg
+
+variable "eks_sg_rule" {
+  description = "Rules for EKS cluster security group ingress from other SGs"
+  type = list(object({
+    from_port = number
+    to_port   = number
+    protocol  = string
+  }))
+}
+
+###################### Node Group  ####################
+
+variable "ami_type" {
+  type        = string
+  default     = ""
+  description = "value of ami_type for db"
 
 }
 
-variable "endpoint_public_access" {
-  type    = bool
-  default = false
+
+####### App Node Group  ######
+
+variable "application_subnet_ids" {
+  type    = list(string)
+  default = []
 
 }
+
+variable "app_capacity_type" {
+  type        = string
+  default     = ""
+  description = "value of capacity_type for db"
+}
+
+variable "app_instance_type" {
+  type        = list(string)
+  default     = []
+  description = "value of instance_type for db"
+}
+variable "app_disk_size" {
+  type        = number
+  description = "value of disk_size for db"
+}
+
+variable "node_group_app_desired_size" {
+  type    = number
+  default = 2
+}
+
+variable "node_group_app_max_size" {
+  type    = number
+  default = 3
+}
+
+variable "node_group_app_min_size" {
+  type    = number
+  default = 1
+}
+
+
+variable "app_taint_key" {
+  type        = string
+  default     = "dedicated"
+  description = "value of taint_key for app"
+}
+variable "app_taint_value" {
+  type        = string
+  default     = "application"
+  description = "value of taint_value for app"
+}
+
+variable "app_taint_effect" {
+  type        = string
+  default     = "NO_SCHEDULE"
+  description = "value of taint_effect for app"
+
+}
+
+
+
+####### DB Node Group  ######
+
+variable "db_taint_key" {
+  type        = string
+  default     = "dedicated"
+  description = "value of taint_key for app"
+}
+variable "db_taint_value" {
+  type        = string
+  default     = "database"
+  description = "value of taint_value for app"
+}
+
+variable "db_taint_effect" {
+  type        = string
+  default     = "NO_SCHEDULE"
+  description = "value of taint_effect for app"
+
+}
+
+
+variable "db_capacity_type" {
+  type        = string
+  default     = ""
+  description = "value of capacity_type for db"
+}
+
+variable "db_instance_type" {
+  type        = list(string)
+  default     = []
+  description = "value of instance_type for db"
+}
+
+variable "db_disk_size" {
+  type        = number
+  description = "value of disk_size for db"
+}
+
+variable "ami_id" {
+  description = "AMI ID for the launch template"
+  type        = string
+  default     = ""
+}
+
+variable "key_pair" {
+  description = "Optional key pair name for EC2 instances"
+  type        = string
+  default     = ""
+}
+
+
+variable "node_group_db_desired_size" {
+  type    = number
+  default = 2
+}
+
+variable "node_group_db_max_size" {
+  type    = number
+  default = 3
+}
+
+variable "node_group_db_min_size" {
+  type    = number
+  default = 1
+}
+
+variable "database_subnet_ids" {
+  type    = list(string)
+  default = []
+
+}
+variable "vpc_id" {
+  type    = string
+  default = ""
+
+}
+
