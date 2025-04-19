@@ -76,6 +76,10 @@ module "compute_module" {
   node_group_app_desired_size = var.node_group_app_desired_size
   node_group_app_max_size     = var.node_group_app_max_size
   node_group_app_min_size     = var.node_group_app_min_size
+  app_taint_key               = var.app_taint_key
+  app_taint_value             = var.app_taint_value
+  app_taint_effect            = var.app_taint_effect
+
 
 
   #DB node group
@@ -90,6 +94,9 @@ module "compute_module" {
   node_group_db_desired_size = var.node_group_db_desired_size
   node_group_db_max_size     = var.node_group_db_max_size
   node_group_db_min_size     = var.node_group_db_min_size
+  db_taint_key               = var.db_taint_key
+  db_taint_value             = var.db_taint_value
+  db_taint_effect            = var.db_taint_effect
 
 
   vpc_id                 = module.networking_module.vpc_id
