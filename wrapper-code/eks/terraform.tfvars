@@ -31,6 +31,8 @@ public_subnet_indexes = [0, 5]
 
 use_manage_vpc_data = true
 peering_connection = true
+use_hardcoded_vpc_id = false
+hardcoded_vpc_id     = "vpc-0123456789abcdef0"
 vpc_accept         = true
 manage_vpc         = "manage-buildpiper-vpc"
 public_rt_name     = "manage-buildpiper-public-rt"
