@@ -1,5 +1,5 @@
 module "networking_module" {
-  source = "git::https://github.com/aayushverma1910/buildpiper-impl-kt.git//terraform/module/Network-skeleton?ref=terraform-module"
+  source = "git::https://github.com/aayushverma1910/buildpiper-impl-kt.git//terraform/module/Network-skeleton?ref=terraform-manage"
 
   # Region and environment
   region               = var.region
@@ -26,9 +26,17 @@ module "networking_module" {
   private_rt_cidr_block = var.private_rt_cidr_block
   public_subnet_indexes = var.public_subnet_indexes
 
+  # NACL
+  create_nacl = var.create_nacl
+  nacl_names  = var.nacl_names
+  nacl_rules  = var.nacl_rules
+
   # VPC Peering 
   peering_connection = var.peering_connection
   vpc_accept         = var.vpc_accept
+  manage_vpc         = var.manage_vpc
+  public_rt_name     = var.public_rt_name
+  private_rt_name    = var.private_rt_name
 
   #################### Security Groups ########################
 
@@ -36,4 +44,16 @@ module "networking_module" {
   sg_names             = var.sg_names
   security_groups_rule = var.security_groups_rule
 
+
+  # Load Balancer Configuration
+  create_alb         = var.create_alb
+  alb_name           = var.alb_name
+  lb_internal        = var.lb_internal
+  lb_tpye            = var.lb_tpye
+  lb_enable_deletion = var.lb_enable_deletion
+
+  # Route 53 Configuration
+  create_route53 = var.create_route53
+  record_name    = var.record_name
+  record_type    = var.record_type
 }
