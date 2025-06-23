@@ -1,7 +1,7 @@
 #################### Data ########################
 
 data "aws_vpc" "manage_vpc" {
-  count = var.peering_connection ? 1 : 0
+  count = var.use_manage_vpc_data ? 1 : 0
   filter {
     name   = "tag:Name"
     values = [var.manage_vpc]
