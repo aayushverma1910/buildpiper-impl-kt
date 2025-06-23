@@ -110,6 +110,10 @@ variable "public_subnet_indexes" {
 
 #################### VPC Peering ########################
 
+variable "use_manage_vpc_data" {
+  type    = bool
+}
+
 variable "peering_connection" {
   type = bool
 }
