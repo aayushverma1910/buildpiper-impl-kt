@@ -117,6 +117,18 @@ variable "peering_connection" {
   default = true
 }
 
+variable "use_hardcoded_vpc_id" {
+  type        = bool
+  description = "Use hardcoded VPC ID instead of data source"
+  default     = false
+}
+
+variable "hardcoded_vpc_id" {
+  type        = string
+  description = "Hardcoded VPC ID to use when use_hardcoded_vpc_id is true"
+  default     = ""
+}
+
 variable "vpc_accept" {
   type    = bool
   default = true
