@@ -29,6 +29,7 @@ public_subnet_indexes = [0, 5]
 
 #################### VPC Peering ########################
 
+use_manage_vpc_data = true
 peering_connection = true
 vpc_accept         = true
 manage_vpc         = "manage-buildpiper-vpc"
