@@ -223,6 +223,16 @@ variable "private_rt_name" {
   type        = string
   default     = ""
 }
+variable "peer_owner_id" {
+  description = "aws account id"
+  type        = string
+  default     = ""
+}
+variable "vpc_peer_region" {
+  description = "enter the region for connetion of other vpc"
+  type        = string
+  default     = ""
+}
 
 #################### Application Load Balancer ########################
 
