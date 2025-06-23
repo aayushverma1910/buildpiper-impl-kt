@@ -1,4 +1,4 @@
-region       = "us-east-2"
+region       = "eu-north-1"
 project_name = "buildpiper"
 env          = "manage"
 owner        = "aayush"
@@ -24,6 +24,23 @@ public_rt_cidr_block  = "0.0.0.0/0"
 private_rt_cidr_block = "0.0.0.0/0"
 public_subnet_indexes = [0]
 
+
+#################### NACL ########################
+
+create_nacl = true
+nacl_names  = ["public", "frontend", "application", "database"]
+
+nacl_rules = {
+  public = {
+    subnet_index = [0]
+    ingress_rules = [
+      { protocol = "-1", rule_no = 100, action = "allow", cidr_block = "0.0.0.0/0", from_port = 0, to_port = 0 }
+    ]
+    egress_rules = [
+      { protocol = "-1", rule_no = 100, action = "allow", cidr_block = "0.0.0.0/0", from_port = 0, to_port = 0 }
+    ]
+  }
+}
 #################### Security Groups ########################
 
 create_sg = true
@@ -64,4 +81,20 @@ security_groups_rule = {
 
 peering_connection = false
 vpc_accept         = true
+
+
+#################### Application Load Balancer ########################
+
+create_alb         = false
+alb_name           = "alb"
+lb_internal        = false
+lb_tpye            = "application"
+lb_enable_deletion = false
+
+
+#################### Route 53 DNS Records ########################
+
+create_route53 = false
+record_name    = "opstree.aman-dw.in"
+record_type    = "A"
 
