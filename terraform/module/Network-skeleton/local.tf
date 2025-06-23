@@ -74,3 +74,86 @@ locals {
 
 }
 
+#################### NACL ########################
+
+locals {
+  nacls = {
+    for i in range(length(var.nacl_names)) :
+    var.nacl_names[i] => "${var.env}-${var.project_name}-${var.nacl_names[i]}-nacl"
+  }
+
+  nacl_config = {
+    for nacl_key, nacl_value in var.nacl_rules :
+    nacl_key => {
+      name       = local.nacls[nacl_key]
+      subnet_ids = [for index in nacl_value.subnet_index : aws_subnet.subnets[index].id]
+      ingress    = nacl_value.ingress_rules
+      egress     = nacl_value.egress_rules
+    }
+  }
+}
+
+
+# #################### Security Groups ########################
+
+locals {
+  security_groups = {
+    for i in range(length(var.sg_names)) :
+    var.sg_names[i] => "${var.env}-${var.project_name}-${var.sg_names[i]}-sg"
+  }
+
+  security_group_config = {
+    for sg_key, sg_value in var.security_groups_rule :
+    sg_key => {
+      name    = local.security_groups[sg_key]
+      ingress = sg_value.ingress_rules
+      egress  = sg_value.egress_rules
+    }
+  }
+}
+
+
+locals {
+  flattened_ingress_rules = flatten([
+    for sg_key, sg_value in local.security_group_config : [
+      for rule in sg_value.ingress : [
+        rule.source_sg_names != null && length(rule.source_sg_names) > 0 ? {
+          sg_name   = sg_key
+          rule_type = "sg"
+          rule      = rule
+          } : {
+          sg_name   = sg_key
+          rule_type = "cidr"
+          rule      = rule
+        }
+      ]
+    ]
+  ])
+}
+
+
+locals {
+  flattened_egress_rules = flatten([
+    for sg_key, sg_value in local.security_group_config : [
+      for rule in sg_value.egress : [
+        length(try(rule.source_sg_names, [])) > 0 ? {
+          sg_name   = sg_key
+          rule_type = "sg"
+          rule      = rule
+          } : {
+          sg_name   = sg_key
+          rule_type = "cidr"
+          rule      = rule
+        }
+      ]
+    ]
+  ])
+}
+
+
+#################### Application Load Balancer ########################
+
+locals {
+  application_alb_name = "${var.env}-${var.project_name}-${var.alb_name}"
+}
+
