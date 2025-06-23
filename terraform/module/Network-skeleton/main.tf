@@ -119,6 +119,96 @@ resource "aws_route_table_association" "private_rt_association" {
   route_table_id = aws_route_table.private_rt.id
 }
 
+#################### NACL ########################
+
+resource "aws_network_acl" "nacls" {
+  for_each = var.create_nacl ? local.nacl_config : {}
+
+
+  vpc_id     = aws_vpc.otms_vpc.id
+  subnet_ids = each.value.subnet_ids
+
+  tags = {
+    Name  = each.value.name
+    env   = var.env
+    owner = var.owner
+  }
+
+  dynamic "ingress" {
+    for_each = each.value.ingress
+    content {
+      protocol   = ingress.value.protocol
+      rule_no    = ingress.value.rule_no
+      action     = ingress.value.action
+      cidr_block = ingress.value.cidr_block
+      from_port  = ingress.value.from_port
+      to_port    = ingress.value.to_port
+    }
+  }
+
+  dynamic "egress" {
+    for_each = each.value.egress
+    content {
+      protocol   = egress.value.protocol
+      rule_no    = egress.value.rule_no
+      action     = egress.value.action
+      cidr_block = egress.value.cidr_block
+      from_port  = egress.value.from_port
+      to_port    = egress.value.to_port
+    }
+  }
+}
+
+#################### Security Groups ########################
+
+resource "aws_security_group" "sg" {
+  for_each = var.create_sg ? local.security_group_config : {}
+
+  name   = each.value.name
+  vpc_id = aws_vpc.otms_vpc.id
+
+  tags = {
+    Name  = each.value.name
+    env   = var.env
+    owner = var.owner
+  }
+}
+
+
+resource "aws_security_group_rule" "ingress" {
+  for_each = var.create_sg ? {
+    for idx, rule in local.flattened_ingress_rules :
+    idx => rule if rule.rule_type == "cidr" || rule.rule_type == "sg"
+  } : {}
+
+  type              = var.sg_ingress_type
+  from_port         = each.value.rule.from_port
+  to_port           = each.value.rule.to_port
+  protocol          = each.value.rule.protocol
+  description       = each.value.rule.description
+  security_group_id = aws_security_group.sg[each.value.sg_name].id
+
+  cidr_blocks              = each.value.rule_type == "cidr" ? each.value.rule.cidr_blocks : null
+  source_security_group_id = each.value.rule_type == "sg" ? aws_security_group.sg[each.value.rule.source_sg_names[0]].id : null
+}
+
+resource "aws_security_group_rule" "egress" {
+  for_each = var.create_sg ? {
+    for idx, rule in local.flattened_egress_rules :
+    idx => rule if rule.rule_type == "cidr" || rule.rule_type == "sg"
+  } : {}
+
+  type              = var.sg_egress_type
+  from_port         = each.value.rule.from_port
+  to_port           = each.value.rule.to_port
+  protocol          = each.value.rule.protocol
+  description       = each.value.rule.description
+  security_group_id = aws_security_group.sg[each.value.sg_name].id
+
+  cidr_blocks              = each.value.rule_type == "cidr" ? each.value.rule.cidr_blocks : null
+  source_security_group_id = each.value.rule_type == "sg" ? aws_security_group.sg[each.value.rule.source_sg_names[0]].id : null
+}
+
 #################### VPC Peering ######################## 
 
 resource "aws_vpc_peering_connection" "vpc_peering" {
@@ -144,3 +234,41 @@ resource "aws_route" "peer_private_rt" {
   depends_on                = [aws_vpc_peering_connection.vpc_peering]
 }
 
+
+#################### Application Load Balancer ########################
+
+resource "aws_lb" "application-alb" {
+  count              = var.create_alb ? 1 : 0
+  name               = local.application_alb_name
+  internal           = var.lb_internal
+  load_balancer_type = var.lb_tpye
+  security_groups    = [aws_security_group.sg["alb"].id]
+  subnets            = [aws_subnet.subnets[0].id, aws_subnet.subnets[4].id]
+
+  enable_deletion_protection = var.lb_enable_deletion
+
+  tags = {
+    Name  = local.application_alb_name
+    env   = var.env
+    owner = var.owner
+  }
+}
+
+
+################### Route 53 ########################
+
+
+resource "aws_route53_record" "assign_record" {
+  count      = var.create_route53 && var.create_alb ? 1 : 0
+  depends_on = [aws_lb.application-alb]
+  zone_id = data.aws_route53_zone.public_zone[0].zone_id
+  name       = var.record_name
+  type       = var.record_type
+
+  alias {
+    name                   = "dualstack.${aws_lb.application-alb[count.index].dns_name}"
+    zone_id                = aws_lb.application-alb[count.index].zone_id
+    evaluate_target_health = true
+  }
+
+}
