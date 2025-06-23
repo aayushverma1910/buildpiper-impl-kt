@@ -81,7 +81,7 @@ security_groups_rule = {
 
 peering_connection = false
 vpc_accept         = true
-peer_region   = eu-north-1
+peer_region   = "eu-north-1"
 peer_owner_id = 863518439597
 
 #################### Application Load Balancer ########################
