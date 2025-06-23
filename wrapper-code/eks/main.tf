@@ -26,7 +26,8 @@ module "networking_module" {
   private_rt_cidr_block = var.private_rt_cidr_block
   public_subnet_indexes = var.public_subnet_indexes
 
-  # VPC Peering 
+  # VPC Peering   
+  use_manage_vpc_data = var.use_manage_vpc_data
   peering_connection = var.peering_connection
   vpc_accept         = var.vpc_accept
   manage_vpc         = var.manage_vpc
