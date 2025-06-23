@@ -23,3 +23,11 @@ data "aws_route_table" "manage_private_rt" {
     values = [var.private_rt_name]
   }
 }
+
+################### Route 53 ########################
+
+data "aws_route53_zone" "public_zone" {
+  count      = var.create_route53 ? 1 : 0
+  name         = "aman-dw.in"
+  private_zone = false
+}
