@@ -33,3 +33,13 @@ output "database_subnet_ids" {
   value = local.database_subnet_ids
 }
 
+#Application Load Balancer
+output "alb_arn" {
+  value       = length(aws_lb.application-alb) > 0 ? aws_lb.application-alb[0].arn : null
+  description = "ARN of the ALB"
+}
+
+output "alb_dns" {
+  value       = length(aws_lb.application-alb) > 0 ? aws_lb.application-alb[0].dns_name : null
+  description = "DNS of the ALB"
+}
