@@ -37,6 +37,8 @@ module "networking_module" {
   manage_vpc         = var.manage_vpc
   public_rt_name     = var.public_rt_name
   private_rt_name    = var.private_rt_name
+  peer_region   = var.vpc_peer_region
+  peer_owner_id = var.peer_owner_id
 
   #################### Security Groups ########################
 
