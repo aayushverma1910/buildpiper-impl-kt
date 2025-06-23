@@ -71,7 +71,7 @@ variable "subnet_azs" {
 variable "Eip_Domain" {
   type        = string
   description = "Domain for Elastic IP"
-  default     = ""
+  default     = "vpc"
 }
 
 #################### Route Table ########################
@@ -107,6 +107,94 @@ variable "public_subnet_indexes" {
   default     = []
 }
 
+#################### NACL ########################
+
+
+variable "nacl_names" {
+  description = "List of subnet names"
+  type        = list(string)
+  default     = ["public", "frontend", "application", "database"]
+}
+
+variable "nacl_rules" {
+  description = "Map of NACL configurations"
+  type = map(object({
+    subnet_index = list(number)
+    ingress_rules = list(object({
+      protocol   = string
+      rule_no    = number
+      action     = string
+      cidr_block = string
+      from_port  = number
+      to_port    = number
+    }))
+    egress_rules = list(object({
+      protocol   = string
+      rule_no    = number
+      action     = string
+      cidr_block = string
+      from_port  = number
+      to_port    = number
+    }))
+  }))
+}
+
+variable "create_nacl" {
+  description = "Set to true to create NACLs"
+  type        = bool
+  default     = true
+}
+
+#################### Security Groups ########################
+
+
+variable "sg_names" {
+  description = "List of security group keys/names"
+  type        = list(string)
+  default     = ["openvpn", "alb", "frontend", "attendance", "employee", "salary", "postgresql", "redis", "scylla"]
+}
+
+variable "security_groups_rule" {
+  description = "Map of security group rules"
+  type = map(object({
+    name = string
+    ingress_rules = list(object({
+      from_port       = number
+      to_port         = number
+      protocol        = string
+      description     = string
+      cidr_blocks     = optional(list(string), [])
+      source_sg_names = optional(list(string), [])
+    }))
+    egress_rules = list(object({
+      from_port   = number
+      to_port     = number
+      protocol    = string
+      description = string
+      cidr_blocks = list(string)
+    }))
+  }))
+}
+
+variable "sg_egress_type" {
+  default = "egress"
+  type    = string
+
+}
+
+variable "sg_ingress_type" {
+  default = "ingress"
+  type    = string
+
+}
+
+variable "create_sg" {
+  description = "Set to true to create security groups"
+  type        = bool
+  default     = true
+}
+
+
 #################### VPC Peering ########################
 variable "peering_connection" {
   type    = bool
@@ -134,4 +222,53 @@ variable "private_rt_name" {
   description = "Name tag of the private route table"
   type        = string
   default     = ""
+}
+
+#################### Application Load Balancer ########################
+
+variable "alb_name" {
+  type        = string
+  default     = "alb"
+  description = "enter load balancer name"
+}
+variable "lb_internal" {
+  type        = bool
+  default     = true
+  description = "enter load balancer internal"
+}
+variable "lb_tpye" {
+  type        = string
+  default     = "application"
+  description = "enter load balancer type"
+}
+
+variable "lb_enable_deletion" {
+  type        = bool
+  default     = false
+  description = "enter load balancer enable deletion protection"
+}
+
+variable "create_alb" {
+  description = "Set to true to create Application Load Balancer"
+  type        = bool
+  default     = true
+}
+
+#################### Route 53 DNS Records ########################
+
+variable "record_name" {
+  description = "The name/subdomain for the CNAME record (e.g., 'api' for api.example.com)"
+  type        = string
+}
+
+variable "record_type" {
+  description = "The DNS record type - should typically be 'CNAME' for canonical name records"
+  type        = string
+  default     = "A"
+}
+
+variable "create_route53" {
+  description = "Set to true to create Route 53 resources"
+  type        = bool
+  default     = true
 }
