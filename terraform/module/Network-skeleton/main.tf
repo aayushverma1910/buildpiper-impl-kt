@@ -213,8 +213,10 @@ resource "aws_security_group_rule" "egress" {
 
 resource "aws_vpc_peering_connection" "vpc_peering" {
   count       = var.peering_connection ? 1 : 0
+  peer_owner_id = var.peer_owner_id
   peer_vpc_id = aws_vpc.otms_vpc.id
   vpc_id      = data.aws_vpc.manage_vpc[0].id
+  peer_region   = var.vpc_peer_region
   auto_accept = var.vpc_accept
 }
 
