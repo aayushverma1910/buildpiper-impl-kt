@@ -1,5 +1,5 @@
 module "networking_module" {
-  source = "git::https://github.com/aayushverma1910/buildpiper-impl-kt.git//terraform/module/Network-skeleton?ref=terraform-manage"
+  source = "git::https://github.com/aayushverma1910/buildpiper-impl-kt.git//terraform/module/Network-skeleton?ref=Manage-vpc-module"
 
   # Region and environment
   region               = var.region
