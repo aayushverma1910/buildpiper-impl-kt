@@ -228,7 +228,7 @@ variable "peer_owner_id" {
   type        = string
   default     = ""
 }
-variable "vpc_peer_region" {
+variable "peer_region" {
   description = "enter the region for connetion of other vpc"
   type        = string
   default     = ""
