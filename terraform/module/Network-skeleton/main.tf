@@ -123,8 +123,10 @@ resource "aws_route_table_association" "private_rt_association" {
 
 resource "aws_vpc_peering_connection" "vpc_peering" {
   count       = var.peering_connection ? 1 : 0
+  peer_owner_id = var.peer_owner_id
   peer_vpc_id = aws_vpc.otms_vpc.id
   vpc_id      = var.use_hardcoded_vpc_id ? var.hardcoded_vpc_id : data.aws_vpc.manage_vpc[0].id
+  peer_region   = var.peer_region
   auto_accept = var.vpc_accept
 }
 
