@@ -23,3 +23,6 @@ data "aws_route_table" "manage_private_rt" {
     values = [var.private_rt_name]
   }
 }
+
+data "aws_caller_identity" "requester" {
+}
