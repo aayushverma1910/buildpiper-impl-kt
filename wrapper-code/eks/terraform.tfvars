@@ -1,4 +1,4 @@
-region       = "us-east-2"
+region       = "eu-north-1"
 project_name = "buildpiper"
 env          = "dev"
 owner        = "aayush"
@@ -17,7 +17,7 @@ subnet_names = ["public-sub1", "application-sub1", "application-sub2", "database
 
 subnet_cidrs = ["192.168.0.0/28", "192.168.0.16/28", "192.168.0.64/27", "192.168.0.48/28", "192.168.0.96/28", "192.168.0.32/28"]
 
-subnet_azs = ["us-east-2a", "us-east-2a", "us-east-2b", "us-east-2a", "us-east-2b", "us-east-2b"]
+subnet_azs = ["eu-north-1a", "eu-north-1a", "eu-north-1b", "eu-north-1a", "eu-north-1b", "eu-north-1b"]
 
 #################### Route Table ########################
 
@@ -29,17 +29,21 @@ public_subnet_indexes = [0, 5]
 
 #################### VPC Peering ########################
 
-use_manage_vpc_data = true
-use_same_account = true
-peering_connection = true
-use_hardcoded_vpc_id = false
-hardcoded_vpc_id     = "vpc-0123456789abcdef0"
-vpc_accept         = true
-manage_vpc         = "manage-buildpiper-vpc"
-public_rt_name     = "manage-buildpiper-public-rt"
-private_rt_name    = "manage-buildpiper-private-rt"
-peer_region   = "eu-north-1"
-peer_owner_id = "863518439597"
+
+use_manage_vpc_data  = true
+peering_connection   = true
+use_hardcoded_value  = false
+hardcoded_vpc_id     = "vpc-0b2f7d89d33499a95"
+hardcoded_vpc_cidr   = "10.0.0.0/21"
+hardcoded_public_rt  = "rtbassoc-023173896b4bf6a0d"
+hardcoded_private_rt = "rtbassoc-03562b61f6511567f"
+vpc_accept           = true
+manage_vpc           = "manage-buildpiper-vpc"
+public_rt_name       = "manage-buildpiper-public-rt"
+private_rt_name      = "manage-buildpiper-private-rt"
+peer_region          = "eu-north-1"
+use_same_account     = true
+peer_owner_id        = "863518439597"
 
 
 
