@@ -162,7 +162,10 @@ variable "peer_region" {
   type        = string
   default     = ""
 }
-
+variable "use_same_account" {
+  type    = bool
+  default = true
+}
 
 ###################### EKS Cluster  ####################
 
