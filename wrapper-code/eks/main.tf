@@ -35,6 +35,7 @@ module "networking_module" {
   private_rt_name    = var.private_rt_name
 peer_owner_id = var.peer_owner_id
 peer_region = var.peer_region
+use_same_account = var.use_same_account
 
 
 }
