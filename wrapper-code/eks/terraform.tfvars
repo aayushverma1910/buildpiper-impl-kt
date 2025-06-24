@@ -37,7 +37,8 @@ vpc_accept         = true
 manage_vpc         = "manage-buildpiper-vpc"
 public_rt_name     = "manage-buildpiper-public-rt"
 private_rt_name    = "manage-buildpiper-private-rt"
-
+peer_region   = "eu-north-1"
+peer_owner_id = "863518439597"
 
 
 
