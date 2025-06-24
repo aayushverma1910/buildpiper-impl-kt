@@ -30,6 +30,7 @@ public_subnet_indexes = [0, 5]
 #################### VPC Peering ########################
 
 use_manage_vpc_data = true
+use_same_account = true
 peering_connection = true
 use_hardcoded_vpc_id = false
 hardcoded_vpc_id     = "vpc-0123456789abcdef0"
