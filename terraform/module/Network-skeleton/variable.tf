@@ -109,7 +109,7 @@ variable "public_subnet_indexes" {
 
 #################### VPC Peering ########################
 variable "use_manage_vpc_data" {
-  type    = bool
+  type = bool
 }
 
 variable "peering_connection" {
@@ -117,7 +117,7 @@ variable "peering_connection" {
   default = true
 }
 
-variable "use_hardcoded_vpc_id" {
+variable "use_hardcoded_value" {
   type        = bool
   description = "Use hardcoded VPC ID instead of data source"
   default     = false
@@ -125,7 +125,25 @@ variable "use_hardcoded_vpc_id" {
 
 variable "hardcoded_vpc_id" {
   type        = string
-  description = "Hardcoded VPC ID to use when use_hardcoded_vpc_id is true"
+  description = "Hardcoded VPC ID to use when use_hardcoded_value is true"
+  default     = ""
+}
+
+variable "hardcoded_vpc_cidr" {
+  type        = string
+  description = "Hardcoded VPC ID to use when use_hardcoded_value is true"
+  default     = ""
+}
+
+variable "hardcoded_public_rt" {
+  type        = string
+  description = "Hardcoded VPC ID to use when use_hardcoded_value is true"
+  default     = ""
+}
+
+variable "hardcoded_private_rt" {
+  type        = string
+  description = "Hardcoded VPC ID to use when use_hardcoded_value is true"
   default     = ""
 }
 
