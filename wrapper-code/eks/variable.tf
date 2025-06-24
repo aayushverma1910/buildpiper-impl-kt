@@ -152,6 +152,18 @@ variable "private_rt_name" {
   default     = ""
 }
 
+variable "peer_owner_id" {
+  description = "aws account id"
+  type        = string
+  default     = ""
+}
+variable "peer_region" {
+  description = "enter the region for connetion of other vpc"
+  type        = string
+  default     = ""
+}
+
+
 ###################### EKS Cluster  ####################
 
 variable "eks_cluster_version" {
