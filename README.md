@@ -46,15 +46,28 @@ This Terraform project provisions a complete EKS infrastructure for the `buildpi
 
 ## 🔗 VPC Peering Configuration
 
-- **Enabled:** Yes
+- **Peering Connection:** `true`
 - **Peer Region:** `eu-north-1`
-- **Peer Owner ID:** `863518439597`
-- **VPC Name (Manage):** `manage-buildpiper-vpc`
-- **Use Same Account:** Yes
+- - **Use Same Account:** `true`
+- **Peer Owner ID:** `863518439597` # if you want to peering in diff acc then false this value `use_same_account` and mention that `Peer Owner ID`
+- **VPC Name (Manage):** `manage-buildpiper-vpc` #value fetch using data block
 - **Route Tables for Peer VPC:**
-  - Public RT: `manage-buildpiper-public-rt`
-  - Private RT: `manage-buildpiper-private-rt`
+  - Public RT: `manage-buildpiper-public-rt`  #value fetch using data block
+  - Private RT: `manage-buildpiper-private-rt` #value fetch using data block
 - **Hardcoded Peering Support:** Available (toggle with `use_hardcoded_value`)
+
+```bash
+use_hardcoded_value  = true
+hardcoded_vpc_id     = "vpc-0b2f7d89d33499a95"
+hardcoded_vpc_cidr   = "10.0.0.0/21"
+hardcoded_public_rt  = "rtbassoc-023173896b4bf6a0d"
+hardcoded_private_rt = "rtbassoc-03562b61f6511567f"
+peer_region          = "eu-north-1"
+use_same_account     = true
+peer_owner_id        = "863518439597"
+
+```
+
 
 ---
 
