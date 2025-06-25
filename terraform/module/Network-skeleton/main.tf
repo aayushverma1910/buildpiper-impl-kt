@@ -137,12 +137,11 @@ resource "aws_vpc_peering_connection" "vpc_peering" {
   vpc_id        = var.use_hardcoded_value ? var.hardcoded_vpc_id : try(data.aws_vpc.manage_vpc[0].id, "")
   #vpc_id      = var.use_hardcoded_value ? var.hardcoded_vpc_id : data.aws_vpc.manage_vpc[0].id
   peer_region = var.peer_region
-  auto_accept = var.vpc_accept
 }
 
 resource "aws_vpc_peering_connection_accepter" "accepter" {
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
-  auto_accept               = true
+  auto_accept               = var.vpc_accept
 }
 
 resource "aws_route" "peer_public_rt" {
