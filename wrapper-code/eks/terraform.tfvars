@@ -32,7 +32,7 @@ public_subnet_indexes = [0, 5]
 
 use_manage_vpc_data  = true
 peering_connection   = true
-vpc_accept           = false
+vpc_accept           = true
 manage_vpc           = "manage-buildpiper-vpc"
 public_rt_name       = "manage-buildpiper-public-rt"
 private_rt_name      = "manage-buildpiper-private-rt"
