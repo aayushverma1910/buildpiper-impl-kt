@@ -70,7 +70,10 @@ resource "aws_route_table" "public_rt" {
   dynamic "route" {
     for_each = var.peering_connection ? [1] : []
     content {
-      cidr_block = var.use_hardcoded_value ? var.hardcoded_vpc_cidr : try(data.aws_vpc.manage_vpc[0].cidr_block, "")
+      cidr_block = var.use_hardcoded_value ? var.hardcoded_vpc_cidr : (
+  length(data.aws_vpc.manage_vpc) > 0 ? data.aws_vpc.manage_vpc[0].cidr_block : ""
+)
+      #cidr_block = var.use_hardcoded_value ? var.hardcoded_vpc_cidr : try(data.aws_vpc.manage_vpc[0].cidr_block, "")
       #cidr_block                = data.aws_vpc.manage_vpc[0].cidr_block
       vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
     }
@@ -91,7 +94,11 @@ resource "aws_route_table" "private_rt" {
   dynamic "route" {
     for_each = var.peering_connection ? [1] : []
     content {
-      cidr_block = var.use_hardcoded_value ? var.hardcoded_vpc_cidr : try(data.aws_vpc.manage_vpc[0].cidr_block, "")
+      cidr_block = var.use_hardcoded_value ? var.hardcoded_vpc_cidr : (
+  length(data.aws_vpc.manage_vpc) > 0 ? data.aws_vpc.manage_vpc[0].cidr_block : ""
+)
+      
+      #cidr_block = var.use_hardcoded_value ? var.hardcoded_vpc_cidr : try(data.aws_vpc.manage_vpc[0].cidr_block, "")
       #cidr_block                = data.aws_vpc.manage_vpc[0].cidr_block
       vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
     }
@@ -131,6 +138,11 @@ resource "aws_vpc_peering_connection" "vpc_peering" {
   #vpc_id      = var.use_hardcoded_value ? var.hardcoded_vpc_id : data.aws_vpc.manage_vpc[0].id
   peer_region = var.peer_region
   auto_accept = var.vpc_accept
+}
+
+resource "aws_vpc_peering_connection_accepter" "accepter" {
+  vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
+  auto_accept               = true
 }
 
 resource "aws_route" "peer_public_rt" {
