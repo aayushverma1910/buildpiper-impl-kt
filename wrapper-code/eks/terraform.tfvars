@@ -1,6 +1,6 @@
 region       = "eu-north-1"
 project_name = "buildpiper"
-env          = "dev"
+env          = "prod"
 owner        = "aayush"
 
 #################### VPC ########################
@@ -32,15 +32,15 @@ public_subnet_indexes = [0, 5]
 
 use_manage_vpc_data  = true
 peering_connection   = true
+vpc_accept           = false
+manage_vpc           = "manage-buildpiper-vpc"
+public_rt_name       = "manage-buildpiper-public-rt"
+private_rt_name      = "manage-buildpiper-private-rt"
 use_hardcoded_value  = false
 hardcoded_vpc_id     = "vpc-0b2f7d89d33499a95"
 hardcoded_vpc_cidr   = "10.0.0.0/21"
 hardcoded_public_rt  = "rtbassoc-023173896b4bf6a0d"
 hardcoded_private_rt = "rtbassoc-03562b61f6511567f"
-vpc_accept           = true
-manage_vpc           = "manage-buildpiper-vpc"
-public_rt_name       = "manage-buildpiper-public-rt"
-private_rt_name      = "manage-buildpiper-private-rt"
 peer_region          = "eu-north-1"
 use_same_account     = true
 peer_owner_id        = "863518439597"
