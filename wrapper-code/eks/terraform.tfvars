@@ -1,6 +1,6 @@
 region       = "eu-north-1"
 project_name = "buildpiper"
-env          = "prod"
+env          = "dev"
 owner        = "aayush"
 
 #################### VPC ########################
@@ -30,17 +30,17 @@ public_subnet_indexes = [0, 5]
 #################### VPC Peering ########################
 
 
-use_manage_vpc_data  = true
+use_manage_vpc_data  = false
 peering_connection   = true
 vpc_accept           = true
 manage_vpc           = "manage-buildpiper-vpc"
 public_rt_name       = "manage-buildpiper-public-rt"
 private_rt_name      = "manage-buildpiper-private-rt"
-use_hardcoded_value  = false
-hardcoded_vpc_id     = "vpc-0b2f7d89d33499a95"
+use_hardcoded_value  = true
+hardcoded_vpc_id     = "vpc-03bd2adf5ef15db3d"
 hardcoded_vpc_cidr   = "10.0.0.0/21"
-hardcoded_public_rt  = "rtbassoc-023173896b4bf6a0d"
-hardcoded_private_rt = "rtbassoc-03562b61f6511567f"
+hardcoded_public_rt  = "rtb-00d435042b0b7383b"
+hardcoded_private_rt = "rtb-04ac932cfa2c15028"
 peer_region          = "eu-north-1"
 use_same_account     = true
 peer_owner_id        = "863518439597"
@@ -153,4 +153,3 @@ eks_node_role_policy_arns = {
   eks_cni         = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   ec2_readonly    = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
-
