@@ -35,12 +35,11 @@ module "networking_module" {
   private_rt_name     = var.private_rt_name
   peer_owner_id       = var.peer_owner_id
   peer_region         = var.peer_region
-  use_same_account    = var.use_same_account
-  hardcoded_vpc_id    = var.hardcoded_vpc_id
-  hardcoded_public_rt = var.hardcoded_public_rt
+  use_same_account     = var.use_same_account
+  hardcoded_vpc_id     = var.hardcoded_vpc_id
+  hardcoded_public_rt  = var.hardcoded_public_rt
   hardcoded_private_rt = var.hardcoded_private_rt
-
-
+  hardcoded_vpc_cidr   = var.hardcoded_vpc_cidr
 }
 
 module "compute_module" {
