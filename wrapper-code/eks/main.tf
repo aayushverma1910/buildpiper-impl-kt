@@ -36,6 +36,9 @@ module "networking_module" {
   peer_owner_id       = var.peer_owner_id
   peer_region         = var.peer_region
   use_same_account    = var.use_same_account
+  hardcoded_vpc_id    = var.hardcoded_vpc_id
+  hardcoded_public_rt = var.hardcoded_public_rt
+  hardcoded_private_rt = var.hardcoded_private_rt
 
 
 }
