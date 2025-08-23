@@ -133,6 +133,7 @@ resource "aws_vpc_peering_connection" "vpc_peering" {
 }
 
 resource "aws_vpc_peering_connection_accepter" "accepter" {
+  count                     = var.peering_connection ? 1 : 0
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering[0].id
   auto_accept               = var.vpc_accept
 }
