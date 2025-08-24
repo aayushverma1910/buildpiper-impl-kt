@@ -56,8 +56,17 @@ This Terraform project provisions a complete EKS infrastructure for the `buildpi
   - Private RT: `manage-buildpiper-private-rt` #value fetch using data block
 - **Hardcoded Peering Support:** Available (toggle with `use_hardcoded_value`)
 
+> [NOTE!]
+> this version croos account and region is not peering
+> 
+
+
+<img width="1490" height="826" alt="image" src="https://github.com/user-attachments/assets/beedf372-77fa-4600-9dca-3b637afac8e1" />
+
+
 ```bash
 use_hardcoded_value  = true
+vpc_accept           = true #(always ture in this version)
 hardcoded_vpc_id     = "vpc-0b2f7d89d33499a95"
 hardcoded_vpc_cidr   = "10.0.0.0/21"
 hardcoded_public_rt  = "rtbassoc-023173896b4bf6a0d"
