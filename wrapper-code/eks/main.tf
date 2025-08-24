@@ -40,6 +40,7 @@ module "networking_module" {
   hardcoded_public_rt  = var.hardcoded_public_rt
   hardcoded_private_rt = var.hardcoded_private_rt
   hardcoded_vpc_cidr   = var.hardcoded_vpc_cidr
+  use_hardcoded_value = var.use_hardcoded_value
 }
 
 module "compute_module" {
